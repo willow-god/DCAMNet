@@ -3,67 +3,10 @@
 # Copyright (c) Megvii Inc. All rights reserved.
 
 from torch import nn
-import torch
+
 from .network_blocks import BaseConv, CSPLayer, DWConv, Focus, ResLayer, SPPBottleneck
 
-#=================================下下下
-#CA注意模块
-class h_sigmoid(nn.Module):
-    def __init__(self, inplace=True):
-        super(h_sigmoid, self).__init__()
-        self.relu = nn.ReLU6(inplace=inplace)
- 
-    def forward(self, x):
-        return self.relu(x + 3) / 6
- 
- 
-class h_swish(nn.Module):
-    def __init__(self, inplace=True):
-        super(h_swish, self).__init__()
-        self.sigmoid = h_sigmoid(inplace=inplace)
- 
-    def forward(self, x):
-        return x * self.sigmoid(x)
- 
- 
-class CA(nn.Module):
-    def __init__(self, inp, oup, reduction=32):
-        super(CA, self).__init__()
-        self.pool_h = nn.AdaptiveAvgPool2d((None, 1))
-        self.pool_w = nn.AdaptiveAvgPool2d((1, None))
- 
-        mip = max(8, inp // reduction)
- 
-        self.conv1 = nn.Conv2d(inp, mip, kernel_size=1, stride=1, padding=0)
-        self.bn1 = nn.BatchNorm2d(mip)
-        self.act = h_swish()
- 
-        self.conv_h = nn.Conv2d(mip, oup, kernel_size=1, stride=1, padding=0)
-        self.conv_w = nn.Conv2d(mip, oup, kernel_size=1, stride=1, padding=0)
- 
-    def forward(self, x):
-        identity = x
- 
-        n, c, h, w = x.size()
-        x_h = self.pool_h(x)
-        x_w = self.pool_w(x).permute(0, 1, 3, 2)
- 
-        y = torch.cat([x_h, x_w], dim=2)
-        y = self.conv1(y)
-        y = self.bn1(y)
-        y = self.act(y)
- 
-        x_h, x_w = torch.split(y, [h, w], dim=2)
-        x_w = x_w.permute(0, 1, 3, 2)
- 
-        a_h = self.conv_h(x_h).sigmoid()
-        a_w = self.conv_w(x_w).sigmoid()
- 
-        out = identity * a_w * a_h
- 
-        return out
 
-#======================上上上
 class Darknet(nn.Module):
     # number of blocks from dark2 to dark5.
     depth2blocks = {21: [1, 2, 2, 1], 53: [2, 8, 8, 4]}
@@ -210,8 +153,7 @@ class CSPDarknet(nn.Module):
         # dark5
         self.dark5 = nn.Sequential(
             Conv(base_channels * 8, base_channels * 16, 3, 2, act=act),
-            # SPPBottleneck(base_channels * 16, base_channels * 16, activation=act),
-            CA(base_channels * 16, base_channels * 16),
+            SPPBottleneck(base_channels * 16, base_channels * 16, activation=act),
             CSPLayer(
                 base_channels * 16,
                 base_channels * 16,

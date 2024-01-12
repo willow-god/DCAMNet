@@ -8,7 +8,7 @@ from yolox.exp import Exp as MyExp
 class Exp(MyExp):
     def __init__(self):
         super(Exp, self).__init__()
-        self.num_classes = 20
+        self.num_classes = 6
         self.depth = 0.33
         self.width = 0.50
         self.warmup_epochs = 1
@@ -25,8 +25,12 @@ class Exp(MyExp):
         from yolox.data import VOCDetection, TrainTransform
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
-            image_sets=[('2007', 'trainval'), ('2012', 'trainval')],
+            data_dir="/root/YOLOX/datasets/VOCdevkit"
+                # os.path.join(get_yolox_datadir(), "VOCdevkit")
+                ,
+            image_sets=[('2007', 'trainval')
+                        # , ('2012', 'trainval')
+                        ],
             img_size=self.input_size,
             preproc=TrainTransform(
                 max_labels=50,
@@ -41,7 +45,9 @@ class Exp(MyExp):
         legacy = kwargs.get("legacy", False)
 
         return VOCDetection(
-            data_dir=os.path.join(get_yolox_datadir(), "VOCdevkit"),
+            data_dir= "/root/YOLOX/datasets/VOCdevkit"
+            # os.path.join(get_yolox_datadir(), "VOCdevkit")
+            ,
             image_sets=[('2007', 'test')],
             img_size=self.test_size,
             preproc=ValTransform(legacy=legacy),

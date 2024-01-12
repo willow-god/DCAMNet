@@ -2,6 +2,9 @@
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
 
+import sys
+sys.path.append('/root/YOLOX')
+
 import argparse
 import random
 import warnings
@@ -144,3 +147,12 @@ if __name__ == "__main__":
         dist_url=dist_url,
         args=(exp, args),
     )
+    
+    # 为了服务器自动关机
+    import os
+
+    # 执行关机命令
+    # os.system("shutdown /s /t 1")  # Windows系统下的关机命令
+
+    # 或者可以使用以下命令（适用于Unix/Linux系统）
+    os.system("shutdown -h now")

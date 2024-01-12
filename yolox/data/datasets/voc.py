@@ -278,7 +278,7 @@ class VOCDetection(CacheDataset):
     def _do_python_eval(self, output_dir="output", iou=0.5):
         rootpath = os.path.join(self.root, "VOC" + self._year)
         name = self.image_set[0][1]
-        annopath = os.path.join(rootpath, "Annotations", "{:s}.xml")
+        annopath = os.path.join(rootpath, "Annotations", "{}.xml") # 去掉了大括号中的:s~
         imagesetfile = os.path.join(rootpath, "ImageSets", "Main", name + ".txt")
         cachedir = os.path.join(
             self.root, "annotations_cache", "VOC" + self._year, name

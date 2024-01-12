@@ -1,5 +1,35 @@
+## 简介：
+这个代码是基于YOLOX，使用DarkNet作为基线网络进行改进的DCAMNet代码，仅供参考，可能不是很全面，分别参照了以下文章：
+
+```
+DCAMNet学习笔记：https://blog.csdn.net/liKeQing1027520/article/details/134515030?spm=1001.2014.3001.5501
+DCAMNet论文原文链接：https://ieeexplore.ieee.org/document/10024396
+DCAMNet复现：https://blog.csdn.net/liKeQing1027520/article/details/134697267
+YOLOX讲解：https://zhuanlan.zhihu.com/p/397993315
+YOLOX网络结构：https://blog.csdn.net/qq_37541097/article/details/125132817
+YOLOX代码解析：https://zhuanlan.zhihu.com/p/411045300
+配置好的VOC_YOLOX代码，里面有中文注释：https://github.com/renyuehe/bilibili-yolox_simple_voc_coco
+YOLOX源代码：https://github.com/Megvii-BaseDetection/YOLOX.git
+```
+
+感谢作者，以上内容仅供参考，如有侵权请联系删除：2411457922@qq.com
+
+# 过程：
+
+本代码已经配置好了VOC数据集，通过修改./dataset数据集中的文件进行训练，如果使用COCO需要自行继续修改
+
+训练前，需要下载预训练模型到过程中，预训练模型为下方YOLOX模型文件，本文采用YOLOX_s
+
+在./yolox/data/datasets.voc_class.py文件中修改类别，进行调整，注意每个类别后添加逗号，格式保持一致
+
+修改YOLOX/exps/example/yolox_voc/yolox_voc_s.py文件中self.num_classes = 类别数
+
+使用/root/run.sh脚本启动训练，最终结果将放到根目录中，也就是输出。
+
+
 <div align="center"><img src="assets/logo.png" width="350"></div>
 <img src="assets/demo.png" >
+
 
 ## Introduction
 YOLOX is an anchor-free version of YOLO, with a simpler design but better performance! It aims to bridge the gap between research and industrial communities.

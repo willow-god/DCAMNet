@@ -12,7 +12,7 @@ import torch.nn.functional as F
 from yolox.utils import bboxes_iou, cxcywh2xyxy, meshgrid, visualize_assign
 
 from .losses import IOUloss
-from .network_blocks import BaseConv, DWConv, DeformConv
+from .network_blocks import BaseConv, DWConv
 
 
 class YOLOXHead(nn.Module):
@@ -76,17 +76,13 @@ class YOLOXHead(nn.Module):
             self.reg_convs.append(
                 nn.Sequential(
                     *[
-                        DeformConv( int(256 * width),
-                                    int(256 * width)),
-                                    nn.BatchNorm2d(int(256 * width)),
-                                    nn.SiLU(inplace=True),
-                        # Conv(
-                        #     in_channels=int(256 * width),
-                        #     out_channels=int(256 * width),
-                        #     ksize=3,
-                        #     stride=1,
-                        #     act=act,
-                        # ),
+                        Conv(
+                            in_channels=int(256 * width),
+                            out_channels=int(256 * width),
+                            ksize=3,
+                            stride=1,
+                            act=act,
+                        ),
                         Conv(
                             in_channels=int(256 * width),
                             out_channels=int(256 * width),
