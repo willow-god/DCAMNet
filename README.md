@@ -12,6 +12,8 @@ YOLOX代码解析：https://zhuanlan.zhihu.com/p/411045300
 YOLOX源代码：https://github.com/Megvii-BaseDetection/YOLOX.git
 ```
 
+讲解链接为：[点击打开](https://www.qyliu.top/posts/57a50b33)
+
 感谢作者，以上内容仅供参考，如有侵权请联系删除：2411457922@qq.com
 
 # 过程：
